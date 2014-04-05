@@ -24,7 +24,7 @@ Defining a constant `OUTDIR` as `Foo!` will replace all instances of `%OUTDIR%` 
 Mapping Files
 -------------
 
-Mapping rules are defined by  `(source) -> (target)`. `(target)` can be empty. Wildcards (* and ?) are supported.
+Mapping rules are defined by  `(source) -> (target)`. For `target`, `\` denotes the package root. You don't have to start `target` with a `\`. That also means an empty value for `target` is equivalent to `\`. Wildcards (* and ?) are supported.
 
 **Example 1**: `..\..\some\other\file.txt -> \`
 
@@ -35,13 +35,13 @@ Deploys file.txt from that external folder to package root.
 
 Deploys all DLLs to a subfolder in the package.
 
-**Example 3**: `%OUTDIR%\file??.txt -> \`
+**Example 3**: `%OUTDIR%\file??.txt -> `
 
-Looks in %OUTDIR% (defined with /D) and deploys fileXX.txt to package root.
+Looks in %OUTDIR% (defined with /D) and deploys fileXX.txt to package root. (Note empty `target`.)
 
 Here's the one I use for my Quake 3: Arena Windows 8 port to Surface:
 
-    ..\..\baseq3\autoexec.cfg                   -> baseq3   
+    ..\..\baseq3\autoexec.cfg                   -> baseq3    
     ..\..\baseq3\*.pk3                          -> baseq3   
     %OUTDIR%\*.dll                              ->    
     %OUTDIR%\..\%CONFIGURATION% Win8\*.cso      -> baseq3\hlsl
