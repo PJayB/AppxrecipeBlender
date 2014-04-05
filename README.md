@@ -3,21 +3,23 @@ AppxrecipeBlender
 
 http://twitter.com/PJayB
 
-This tool splices in additional files for deployment into Windows Runtime packages.
+This tool splices in additional files for deployment into Windows Runtime packages. I needed much more control about the layout of my package, but Visual Studio insisted on using a flat layout. From what I could see on the Internet there wasn't any way to change this, so I wrote this.
 
-This gives you: 
-- More control over what files go into your packages.
-- Where those files go. Subdirectory support!
+This tool can give you: 
+- More control over what files go into your packages and where they are on your disk.
+- Where those files go inside the package. Subdirectory support!
  
 Usage
 -----
 
 Run as a post build step. Use these flags to control the tool:
 
-- `/D <name> <value>`: Defines a variable for replacement in the mapping file
-- `/recipefile`: The input .appxrecipe file
-- `/outfile`: The output .appxrecipe file (can be same as input)
-- `/mappingfile`: The key -> value pairs of path mappings
+- `/D <name> <value>`: Defines a constant for replacement in the mapping file.
+- `/recipefile`: The input .appxrecipe file.
+- `/outfile`: The output .appxrecipe file (can be same as input).
+- `/mappingfile`: The key -> value pairs of path mappings.
+
+Defining a constant `OUTDIR` as `Foo!` will replace all instances of `%OUTDIR%` inside your mapping file with `Foo!`.
 
 Mapping Files
 -------------
@@ -44,3 +46,6 @@ Here's the one I use for my Quake 3: Arena Windows 8 port to Surface:
     %OUTDIR%\*.dll                              ->    
     %OUTDIR%\..\%CONFIGURATION% Win8\*.cso      -> baseq3\hlsl
 
+With the following command line:
+
+    $(ProjectDir)AppxrecipeBlender /mapfile "$(ProjectDir)packagelist.txt" /recipefile "$(OutDir)$(ProjectName).build.appxrecipe" /outfile "$(OutDir)$(ProjectName).build.appxrecipe" /D CONFIGURATION "$(Configuration)" /D PLATFORM "$(Platform)" /D OUTDIR "$(OutDir)."
